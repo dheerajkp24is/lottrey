@@ -45,4 +45,13 @@ export const bulkAddBuyers = (data) => API.post('/buyers/bulk', data);
 export const updateBuyer = (id, data) => API.put(`/buyers/${id}`, data);
 export const deleteBuyer = (id) => API.delete(`/buyers/${id}`);
 
+// Customers / Profiles
+export const checkCustomerMobile = (mobile) => API.get(`/customers/check/${mobile}`);
+export const registerCustomer = (data) => API.post('/customers/register', data);
+export const getCustomerProfile = (mobile) => API.get(`/customers/profile/${mobile}`);
+export const fetchCustomers = (search = '') =>
+  API.get(`/customers${search ? `?search=${encodeURIComponent(search)}` : ''}`);
+export const deleteCustomer = (id) => API.delete(`/customers/${id}`);
+export const markCustomerChecked = (mobile) => API.put(`/customers/${mobile}/checked`);
+
 export default API;

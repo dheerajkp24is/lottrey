@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchDraws, checkTicketResult, fetchImages } from '../services/api';
+import { fetchDraws, checkTicketResult, fetchImages, checkCustomerMobile, markCustomerChecked } from '../services/api';
 
 const HomePage = () => {
   const navigate = useNavigate(); // ADDED NAVIGATION
@@ -31,31 +31,47 @@ const HomePage = () => {
   }, []);
 
   const handleCheck = async (e) => {
-    e.preventDefault();
-    if (!ticketNumber.trim()) {
-      setError('Please enter your mobile number.');
+  e.preventDefault();
+  const mobile = ticketNumber.trim();
+
+  if (!mobile) {
+    setError('Please enter your mobile number.');
+    return;
+  }
+
+  setLoading(true);
+  setError('');
+
+  try {
+    // 1) Check if customer profile exists
+    const checkRes = await checkCustomerMobile(mobile);
+
+    if (!checkRes.data.exists) {
+      // Not registered → go to bio data registration
+      navigate('/register', { state: { mobile } });
       return;
     }
 
-    setLoading(true);
-    setError('');
+    // 2) Profile exists → check lottery result
+    const res = await checkTicketResult({
+      drawId: selectedDraw,
+      mobile,
+      ticketNumber: mobile,
+    });
 
+    // optional: mark last checked
     try {
-      const res = await checkTicketResult({
-        drawId: selectedDraw,
-        mobile: ticketNumber.trim(),
-        ticketNumber: ticketNumber.trim(),
-      });
-      
-      // ✅ REDIRECT TO RESULT PAGE WITH DATA
-      navigate('/result', { state: { resultData: res.data } });
+      await markCustomerChecked(mobile);
+    } catch (e) {}
 
-    } catch (err) {
-      setError(err.response?.data?.message || 'Verification failed. Please try again.');
-      setLoading(false);
-    }
-  };
-
+    // 3) Go to result page
+    navigate('/result', { state: { resultData: res.data } });
+  } catch (err) {
+    setError(err.response?.data?.message || 'Verification failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="kg-main">
       {/* ORANGE CHECK BOX */}

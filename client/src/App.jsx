@@ -19,6 +19,9 @@ import SetWinnersPage from './pages/admin/SetWinnersPage';
 import ManageImagesPage from './pages/admin/ManageImagesPage';
 import ManageBuyersPage from './pages/admin/ManageBuyersPage';
 
+import RegisterPage from './pages/RegisterPage';
+import ManageCustomersPage from './pages/admin/ManageCustomersPage';
+
 import './assets/styles/global.css';
 
 // Public layout (Kerala mobile style)
@@ -46,6 +49,14 @@ const Shell = () => {
         <Route path="/admin/manage-images" element={<ProtectedRoute><ManageImagesPage /></ProtectedRoute>} />
         <Route path="/admin/manage-buyers" element={<ProtectedRoute><ManageBuyersPage /></ProtectedRoute>} />
         <Route
+  path="/admin/customers"
+  element={
+    <ProtectedRoute>
+      <ManageCustomersPage />
+    </ProtectedRoute>
+  }
+/>
+        <Route
   path="/admin/set-winners"
   element={
     <ProtectedRoute>
@@ -65,6 +76,7 @@ const Shell = () => {
         <Route path="/past-results" element={<PastResultsPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/result" element={<ResultPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </PublicLayout>
   );

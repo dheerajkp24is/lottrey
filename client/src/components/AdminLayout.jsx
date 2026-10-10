@@ -33,6 +33,9 @@ const AdminLayout = ({ title, subtitle, children }) => {
       { path: '/admin/manage-buyers', icon: '👥', label: 'Ticket Buyers' },
     ],
   },
+  { group: 'Customers', items: [
+  { path: '/admin/customers', icon: '👥', label: 'Customer Profiles' },
+]},
   {
     group: 'Website Content',
     items: [

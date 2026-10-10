@@ -49,6 +49,7 @@ app.use('/api/winners', require('./routes/winnerRoutes'));
 app.use('/api/check', require('./routes/resultRoutes'));
 app.use('/api/images', require('./routes/imageRoutes'));
 app.use('/api/buyers', require('./routes/buyerRoutes'));
+app.use('/api/customers', require('./routes/customerRoutes'));
 
 app.use(errorHandler);
 
